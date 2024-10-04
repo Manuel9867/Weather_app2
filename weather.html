@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast for {{ weather.city }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .forecast-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .forecast {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            width: calc(33.333% - 20px);
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .forecast:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .forecast img {
+            display: block;
+            margin: 0 auto;
+        }
+        .forecast p {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .forecast p:first-of-type {
+            font-size: 1.2em;
+            color: #3498db;
+        }
+        .back-link {
+            display: inline-block;
+            text-align: center;
+            margin-top: 30px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* New styles */
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(30deg, #f5f7fa 12%, transparent 12.5%, transparent 87%, #f5f7fa 87.5%, #f5f7fa),
+                linear-gradient(150deg, #f5f7fa 12%, transparent 12.5%, transparent 87%, #f5f7fa 87.5%, #f5f7fa),
+                linear-gradient(30deg, #f5f7fa 12%, transparent 12.5%, transparent 87%, #f5f7fa 87.5%, #f5f7fa),
+                linear-gradient(150deg, #f5f7fa 12%, transparent 12.5%, transparent 87%, #f5f7fa 87.5%, #f5f7fa),
+                linear-gradient(60deg, #c3cfe277 25%, transparent 25.5%, transparent 75%, #c3cfe277 75%, #c3cfe277),
+                linear-gradient(60deg, #c3cfe277 25%, transparent 25.5%, transparent 75%, #c3cfe277 75%, #c3cfe277);
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+            z-index: -1;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .tech-border {
+            position: relative;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tech-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #3498db;
+            border-radius: 15px;
+            animation: borderAnimation 4s linear infinite;
+        }
+
+        @keyframes borderAnimation {
+            0% {
+                clip-path: inset(0 0 98% 0);
+            }
+            25% {
+                clip-path: inset(0 98% 0 0);
+            }
+            50% {
+                clip-path: inset(98% 0 0 0);
+            }
+            75% {
+                clip-path: inset(0 0 0 98%);
+            }
+            100% {
+                clip-path: inset(0 0 98% 0);
+            }
+        }
+
+        // ... keep existing styles ...
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    <div class="container">
+        <div class="tech-border">
+            <h1>Weather Forecast for {{ weather.city }}, {{ weather.country }}</h1>
+        </div>
+        <div class="forecast-container">
+            {% for forecast in weather.forecasts %}
+                <div class="forecast">
+                    <p><strong>{{ forecast.datetime }}</strong></p>
+                    <img src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="{{ forecast.description }}">
+                    <p>{{ forecast.temperature }}°C</p>
+                    <p>{{ forecast.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('home') }}" class="back-link">Back to Home</a>
+    </div>
+</body>
+</html>
